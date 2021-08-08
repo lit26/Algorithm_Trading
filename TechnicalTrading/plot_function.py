@@ -160,6 +160,34 @@ class PlotlyPlot:
             fill='tonexty',
             showlegend=False), row=row, col=1)
 
+    def addBuySell(self, signal_column, buy_color='yellow', sell_color='blue', marker_size=10):
+        """Add buy sell
+        Add buy sell signal
+        Args:
+            signal_column(string): the column name of the buy sell signal
+            buy_color(string): the buy signal color
+            sell_color(string): the sell signal color
+            market_size(int): the size of the marker
+        """
+        df2 = self._df[self._df[signal_column] == 1]
+        df3 = self._df[self._df[signal_column] == -1]
+        self._fig.add_trace(go.Scatter(
+            x=df2['Date'],
+            y=df2['Low'],
+            name='buy',
+            mode='markers',
+            marker_symbol='triangle-up',
+            marker=dict(color=buy_color, size=marker_size)
+        ))
+        self._fig.add_trace(go.Scatter(
+            x=df3['Date'],
+            y=df3['High'],
+            name='sell',
+            mode='markers',
+            marker_symbol='triangle-down',
+            marker=dict(color=sell_color, size=marker_size)
+        ))
+
     def _getExcludeDates(self):
         startDate = self._time.iloc[0]
         endDate = self._time.iloc[-1]
